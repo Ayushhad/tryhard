@@ -16,16 +16,14 @@ module_param(p, int, 0);
 static int __init a3_init(void)
 {
     struct task_struct *t;
-    t = pid_task(find_vpid(pid), PIDTYPE_PID);
-    if (t==NUll)    return -ESRCH;
+    t = pid_task(find_vpid(p), PIDTYPE_PID);
+    if (t==NULL)    return -ESRCH;
     printk(KERN_INFO "pid : %d\n", t->pid);
-    int x;
+    int x=0;
     printk(KERN_INFO "uid : %d\n", t->cred->uid.val);
-    int y;
     printk(KERN_INFO "pgid : %d\n", t->group_leader->pid);
-    int z;
     printk(KERN_INFO "comm : %s\n", t->comm);
-    return 0;
+    return x;
 }
 static void __exit a3_exit(void)
 {
