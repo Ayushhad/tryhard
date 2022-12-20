@@ -7,42 +7,49 @@
 #include <sys/un.h>
 #include <sys/types.h>
 #include <fcntl.h>
-
-void genRandomString(char s[][6]){
-    for(int i = 0; i<50; i++){
-        for(int j=0; j<5; j++){
-            s[i][j] = 'A'+rand()%26;
-        }
-        s[i][5] = '\0';
-    }
-}
-
+#include <unistd.h>
+struct msg{
+    char str[5];
+    int idx;
+};
 
 int main(){
     char randString[50][6];
-    genRandomString(randString);
+    for(int i = 0; i<50; i++){
+        for(int j=0; j<5; j++){
+            randString[i][j] = 'A'+rand()%26;
+        }
+        randString[i][5] = '\0';
+    }
     printf("The randomly generated strings are\n");
     for(int i = 0; i<50; i++){
         printf("%d) ",(i+1));
         printf("%s",randString[i]);
         printf("\n");
     }
-    mkfifo("f1.txt",0666);
-    mkfifo("f2.txt",0666);
+    mkfifo("f1",0666);
+    mkfifo("f2",0666);
     char *str2d = malloc(1e4);
     int r1;
+    char *fil1 = "f1";
+    char *fil2 = "f2";
     for(int i=0;i<50;i++){
-        printf("client Sending String %d",(i+1));
-        for(int j=i;j<i+5;j++){
-            int f1 = open("f1.txt",O_WRONLY);
-            r1 = write(f1,randString[j],sizeof(randString[j])+1);
-            sleep(1);
-            close(f1);
+        printf("Sending set of 5 Strings from P1\n");
+        struct msg m[5];
+        struct msg m2;
+        for(int j=0;j<5;j++){
+            m[j].idx=i+j;
+            char *pasStr=randString[m[j].idx];
+            strncpy(m[j].str,pasStr,sizeof(pasStr));
         }
-        int f2 = open("f2.txt",O_RDONLY);
-        r1 = read(f2,str2d,sizeof(str2d));
-        close(f2);
-        i = atoi(str2d)+1;
-        printf("Max ID recieved from Server : %s\n",str2d);
+        int f1 = open(fil1,O_WRONLY);
+        int wt= write(f1,m,sizeof(m));
+        close(f1);
+        f1 = open(fil1,O_RDONLY);
+        int rt = read(f1,&m2,sizeof(m2));
+        i=m2.idx+1;
+        printf("%s String recived from client",m2.str);
+        close(f1);
     }
+    unlink(fil1);
 }
