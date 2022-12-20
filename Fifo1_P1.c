@@ -9,7 +9,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 struct msg{
-    char str[5];
+    char str[6];
     int idx;
 };
 
