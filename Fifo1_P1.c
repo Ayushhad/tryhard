@@ -43,7 +43,7 @@ int main(){
             strncpy(m[j].str,pasStr,sizeof(pasStr));
         }
         int f1 = open(fil1,O_WRONLY);
-        int wt= write(f1,m,sizeof(m));
+        int wt= write(f1,&m,sizeof(m));
         close(f1);
         f1 = open(fil1,O_RDONLY);
         int rt = read(f1,&m2,sizeof(m2));
