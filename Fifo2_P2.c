@@ -27,9 +27,9 @@ int main(){
         printf("\n");
         id = mr[5].idx;
         f1 = open("f1",O_WRONLY);
-        int r = write(f1,&id,sizeof(str2d));
+        int r = write(f1,&id,sizeof(f1));
         close(f1);
         printf("Highest ID sent by Client\n");
     }
-    unlink(f1);
+    unlink("f1"); 
 }
