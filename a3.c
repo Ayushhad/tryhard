@@ -2,7 +2,7 @@
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/unistd.h>
-#include <linux/syscall.h>
+#include <linux/syscalls.h>
 #include <linux/sched.h>
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Ayushhad");
